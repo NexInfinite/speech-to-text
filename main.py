@@ -5,15 +5,16 @@ import keyboard
 
 def callback(recognizer, audio):
     try:
-        text = recognizer.recognize_google(audio)
+        text = recognizer.recognize_google(audio, language="en-gb")
 
         if text.startswith("command "):
             command = text.strip("command ")
-            print(f"COMMAND: {command}")
+            print("COMMAND: {}".format(command))
 
             if command == "penis":
                 for _ in range(10):
-                    keyboard.write(f"penis\n")
+                    keyboard.write("penis\n")
+
             elif command.startswith("repeat"):
                 split = command.split(" ")
                 number = split[-2]
@@ -21,14 +22,18 @@ def callback(recognizer, audio):
                     number = int(number)
                     text_to_send = " ".join(split[1:-2])
                     for _ in range(number):
-                        keyboard.write(f"{text_to_send}\nI'm not thinking I'll give it you"
-                                       f"")
-                    print(f"REPEAT ({number}): {text_to_send}")
+                        keyboard.write("{}\n".format(text_to_send))
+                    print("REPEAT ({}): {}".format(number, text_to_send))
                 except ValueError:
-                    print("Didnt match")
+                    print("REPEAT: Didn't match")
+
+            elif command.startswith("italics"):
+                text_to_send = command.strip("italics ")
+                keyboard.write("*{}*\n".format(text_to_send))
+                print("ITALICS: {}".format(text_to_send))
         else:
-            keyboard.write(f"{text}\n")
-            print(f"TEXT: {text}")
+            keyboard.write("{}\n".format(text))
+            print("TEXT: {}".format(text))
 
     except sr.UnknownValueError:
         print("Google Speech Recognition could not understand audio")
