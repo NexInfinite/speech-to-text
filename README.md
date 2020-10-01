@@ -1,9 +1,9 @@
 # Installation
 Go to [the releases](https://github.com/NexInfinite/speech-to-text/releases/) and download the latest version. 
-- Extract the files into a folder
-- Run `main.exe`
+- Download the file
+- Run `speech_to_text_console.exe`
 
-To stop the program simply close out of `main.exe`. Everything is a little rough right now but will be neatend up soon.
+To stop the program simply close out of `speech_to_text_console.exe`. Everything is a little rough right now but will be neatend up soon.
 
 # Requirements
 You will need to have `speechRecognition` installed, `pyaudio`, and `keyboard`
