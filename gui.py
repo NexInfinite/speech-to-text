@@ -1,6 +1,19 @@
 import tkinter as tk
 import speech_to_text as spt
 
+# Setup variables
+type_text_setting = spt.get_setting("type_text")
+if type_text_setting:
+    type_text_value = "on"
+else:
+    type_text_value = "off"
+
+repeat_setting = spt.get_setting("repeat")
+if repeat_setting:
+    repeat_value = "on"
+else:
+    repeat_value = "off"
+
 # Window setup
 window = tk.Tk()
 window.geometry("500x500")
@@ -16,6 +29,10 @@ window.tk.call('wm', 'iconphoto', window._w, img)
 # Setup frame
 frame = tk.Frame(window, bg="#121212")
 frame.place(relx=0.5, anchor=tk.CENTER, rely=0.17)
+
+# Setup settings frame
+options_frame = tk.Frame(window, bg="#121212")
+options_frame.place(relx=0.5, anchor=tk.CENTER, rely=0.42)
 
 
 # Definition setups
@@ -37,27 +54,58 @@ def update_text(text):
     recent_text_label.configure(text=text)
 
 
+def type_text_option(event):
+    global type_text_setting
+    type_text_setting = spt.get_setting("type_text")
+    if type_text_setting:
+        spt.save_setting("type_text", False)
+        type_text_button.configure(text="Type text: off")
+    else:
+        spt.save_setting("type_text", True)
+        type_text_button.configure(text="Type text: on")
+
+
+def repeat_option(event):
+    global repeat_setting
+    repeat_setting = spt.get_setting("repeat")
+    if repeat_setting:
+        spt.save_setting("repeat", False)
+        repeat_button.configure(text="Repeat: off")
+    else:
+        spt.save_setting("repeat", True)
+        repeat_button.configure(text="Repeat: on")
+
+
 # Creating title
 title = tk.Label(window, text="Speech to Text", font="roboto 24", fg="#ffffff", bg="#121212")
 title.pack(pady=(5, 0))
 
 # Creating recent text bar
-recent_text_label = tk.Label(frame, text="Speech to text is offline", width=20, height=3, bg="#1c1c1c", fg="#BB86FC",
-                             font=("roboto", 13), borderwidth=0, wraplength=150, justify="center")
+recent_text_label = tk.Label(frame, text="Speech to text is offline", width=20, height=3, bg="#1c1c1c", fg="#BB86FC", font=("roboto", 13), borderwidth=1, wraplength=150)
 recent_text_label.grid(column=2, row=2, rowspan=2, padx=(5, 0), pady=(11, 0))
 
 # Button creation
-start_button = tk.Button(frame, text="Press to start", width=15, height=1, bg="#1c1c1c", fg="#BB86FC",
-                         font=("roboto", 12), borderwidth=0)
-stop_button = tk.Button(frame, text="Press to stop", width=15, bg="#1c1c1c", fg="#BB86FC", font=("roboto", 12),
-                        borderwidth=0)
+start_button = tk.Button(frame, text="Press to start", width=15, height=1, bg="#1c1c1c", fg="#BB86FC", font=("roboto", 12), borderwidth=0, activeforeground="#BB86FC", activebackground="#212121")
+stop_button = tk.Button(frame, text="Press to stop", width=15, bg="#1c1c1c", fg="#BB86FC", font=("roboto", 12), borderwidth=0, activeforeground="#BB86FC", activebackground="#212121")
 
-# Button binds
 start_button.bind("<Button-1>", start_spt)
 stop_button.bind("<Button-1>", stop_spt)
 
-# Button grid
-start_button.grid(column=1, row=2, pady=(15, 5))
+start_button.grid(column=1, row=2, pady=(15, 6))
 stop_button.grid(column=1, row=3, pady=(0, 5))
+
+# Creating options title
+title = tk.Label(window, text="Options", font="roboto 24", fg="#ffffff", bg="#121212")
+title.pack(pady=(90, 0))
+
+# Creating options buttons
+type_text_button = tk.Button(options_frame, text="Type text: {}".format(type_text_value), width=15, height=1, bg="#1c1c1c", fg="#BB86FC", font=("roboto", 12), borderwidth=0, activeforeground="#BB86FC", activebackground="#212121")
+repeat_button = tk.Button(options_frame, text="Repeat: {}".format(repeat_value), width=15, bg="#1c1c1c", fg="#BB86FC", font=("roboto", 12), borderwidth=0, activeforeground="#BB86FC", activebackground="#212121")
+
+type_text_button.bind("<Button-1>", type_text_option)
+repeat_button.bind("<Button-1>", repeat_option)
+
+type_text_button.grid(column=1, row=2, padx=(0, 6))
+repeat_button.grid(column=2, row=2)
 
 window.mainloop()
